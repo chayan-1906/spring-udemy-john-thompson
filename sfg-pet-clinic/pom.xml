@@ -55,7 +55,7 @@
 
     <scm>
 	<developerConnection>scm:git:git@github.com:chayan-1906/sfg-pet-clinic.git</developerConnection>
-	<tag>sfg-pet-clinic-0.0.3</tag>
+	<tag>sfg-pet-clinic-0.0.4</tag>
     </scm>
 
 </project>
