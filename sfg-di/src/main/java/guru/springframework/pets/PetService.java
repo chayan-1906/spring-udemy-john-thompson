@@ -1,4 +1,4 @@
-package guru.springframework.sfgdi.services;
+package guru.springframework.pets;
 
 public interface PetService {
 
