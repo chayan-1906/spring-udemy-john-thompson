@@ -1,0 +1,47 @@
+{
+  "groups": [
+    {
+      "name": "guru",
+      "type": "guru.springframework.sfgdi.config.SfgConfiguration",
+      "sourceType": "guru.springframework.sfgdi.config.SfgConfiguration"
+    },
+    {
+      "name": "guru",
+      "type": "guru.springframework.sfgdi.config.SfgConstructorConfig",
+      "sourceType": "guru.springframework.sfgdi.config.SfgConstructorConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "guru.jdbc-url",
+      "type": "java.lang.String",
+      "sourceType": "guru.springframework.sfgdi.config.SfgConfiguration"
+    },
+    {
+      "name": "guru.jdbc-url",
+      "type": "java.lang.String",
+      "sourceType": "guru.springframework.sfgdi.config.SfgConstructorConfig"
+    },
+    {
+      "name": "guru.password",
+      "type": "java.lang.String",
+      "sourceType": "guru.springframework.sfgdi.config.SfgConfiguration"
+    },
+    {
+      "name": "guru.password",
+      "type": "java.lang.String",
+      "sourceType": "guru.springframework.sfgdi.config.SfgConstructorConfig"
+    },
+    {
+      "name": "guru.username",
+      "type": "java.lang.String",
+      "sourceType": "guru.springframework.sfgdi.config.SfgConfiguration"
+    },
+    {
+      "name": "guru.username",
+      "type": "java.lang.String",
+      "sourceType": "guru.springframework.sfgdi.config.SfgConstructorConfig"
+    }
+  ],
+  "hints": []
+}
