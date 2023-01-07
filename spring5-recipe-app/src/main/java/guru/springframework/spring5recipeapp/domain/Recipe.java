@@ -2,13 +2,18 @@ package guru.springframework.spring5recipeapp.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class Recipe {
 
 	@Id
@@ -27,13 +32,14 @@ public class Recipe {
 
 	private String url;
 
+	@Lob
 	private String directions;
 
 	@Enumerated(value = EnumType.STRING)
 	private Difficulty difficulty;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
-	private Set<Ingredient> ingredients;
+	private Set<Ingredient> ingredients = new HashSet<> ( );
 
 	@Lob // Lob signifies that the annotated field should be represented as BLOB (binary data) in the DB.
 	private Byte[] image;
@@ -45,5 +51,11 @@ public class Recipe {
 	@JoinTable(name = "recipe_category",
 			joinColumns = @JoinColumn(name = "recipe_id"),
 			inverseJoinColumns = @JoinColumn(name = "category_id"))
-	private Set<Category> categories;
+	private Set<Category> categories = new HashSet<> ( );
+
+	public Recipe addIngredient(Ingredient ingredient) {
+		ingredient.setRecipe ( this );
+		this.ingredients.add ( ingredient );
+		return this;
+	}
 }
