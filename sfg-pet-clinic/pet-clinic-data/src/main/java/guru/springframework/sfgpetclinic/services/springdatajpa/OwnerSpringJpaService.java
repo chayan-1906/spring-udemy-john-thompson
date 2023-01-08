@@ -4,7 +4,7 @@ import guru.springframework.sfgpetclinic.model.Owner;
 import guru.springframework.sfgpetclinic.repositories.IOwnerRepository;
 import guru.springframework.sfgpetclinic.repositories.IPetRepository;
 import guru.springframework.sfgpetclinic.repositories.IPetTypeRepository;
-import guru.springframework.sfgpetclinic.services.OwnerService;
+import guru.springframework.sfgpetclinic.services.IOwnerService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import java.util.Set;
 
 @Service
 @Profile("springdatajpa")
-public class OwnerSpringJpaService implements OwnerService {
+public class OwnerSpringJpaService implements IOwnerService {
 
 	private final IOwnerRepository ownerRepository;
 
