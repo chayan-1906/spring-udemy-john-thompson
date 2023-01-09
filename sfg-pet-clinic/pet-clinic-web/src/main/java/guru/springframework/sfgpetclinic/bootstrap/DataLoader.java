@@ -1,3 +1,4 @@
+
 package guru.springframework.sfgpetclinic.bootstrap;
 
 import guru.springframework.sfgpetclinic.model.*;
@@ -66,44 +67,41 @@ public class DataLoader implements CommandLineRunner {
 		Speciality savedDentistry = specialityService.save ( dentistry );
 
 		Owner owner1 = new Owner ( );
-		owner1.setId ( 1L );
+//		owner1.setId ( 1L );
 		owner1.setFirstName ( "Padmanabha" );
 		owner1.setLastName ( "Das" );
 		owner1.setAddress ( "Omrahagunj" );
 		owner1.setCity ( "Lalbagh" );
 		owner1.setTelephone ( "+91-9647100133" );
 
-		Pet mikesPet = new Pet ( );
-		mikesPet.setPetType ( savedDogPetType );
-		mikesPet.setOwner ( owner1 );
-		mikesPet.setBirthDate ( LocalDate.now ( ) );
-		mikesPet.setName ( "Rosco" );
-		owner1.getPets ( ).add ( mikesPet );
-
+		Pet padmanabhasPet = new Pet ( );
+		padmanabhasPet.setPetType ( savedDogPetType );
+		padmanabhasPet.setOwner ( owner1 );
+		padmanabhasPet.setBirthDate ( LocalDate.now ( ) );
+		padmanabhasPet.setName ( "Rosco" );
+		owner1.getPets ( ).add ( padmanabhasPet );
 		ownerService.save ( owner1 );
 
 		Owner owner2 = new Owner ( );
-		owner2.setId ( 2L );
+//		owner2.setId ( 2L );
 		owner2.setFirstName ( "Prosenjit" );
 		owner2.setLastName ( "Das" );
-		owner1.setAddress ( "Omrahaganj" );
-		owner1.setCity ( "Lalbagh, MSD, WB" );
-		owner1.setTelephone ( "+91-9832740782" );
+		owner2.setAddress ( "Omrahaganj" );
+		owner2.setCity ( "Lalbagh, MSD, WB" );
+		owner2.setTelephone ( "+91-9832740782" );
 
-		Pet fionasCat = new Pet ( );
-		fionasCat.setPetType ( savedCatPetType );
-		fionasCat.setOwner ( owner2 );
-		fionasCat.setBirthDate ( LocalDate.now ( ) );
-		fionasCat.setName ( "Just Cat" );
-		owner2.getPets ( ).add ( fionasCat );
-
+		Pet prosenjitsPet = new Pet ( );
+		prosenjitsPet.setName ( "Just Cat" );
+		prosenjitsPet.setOwner ( owner2 );
+		prosenjitsPet.setBirthDate ( LocalDate.now ( ) );
+		prosenjitsPet.setPetType ( savedCatPetType );
+		owner2.getPets ( ).add ( prosenjitsPet );
 		ownerService.save ( owner2 );
 
 		Visit catVisit = new Visit ( );
-		catVisit.setPet ( fionasCat );
+		catVisit.setPet ( prosenjitsPet );
 		catVisit.setDate ( LocalDate.now ( ) );
-		catVisit.setDescription ( "Sneezy kitty" );
-
+		catVisit.setDescription ( "Sneezy Kitty" );
 		visitService.save ( catVisit );
 
 		System.out.println ( "Loaded owners..." );

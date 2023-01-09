@@ -5,18 +5,20 @@ import guru.springframework.sfgpetclinic.model.Pet;
 import guru.springframework.sfgpetclinic.services.IOwnerService;
 import guru.springframework.sfgpetclinic.services.IPetService;
 import guru.springframework.sfgpetclinic.services.IPetTypeService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
 @Service
-public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements IOwnerService {
+@Profile({"default", "map"})
+public class OwnerMapService extends AbstractMapService<Owner, Long> implements IOwnerService {
 
 	private final IPetTypeService petTypeService;
 
 	private final IPetService petService;
 
-	public OwnerServiceMap(IPetTypeService petTypeService, IPetService petService) {
+	public OwnerMapService(IPetTypeService petTypeService, IPetService petService) {
 		this.petTypeService = petTypeService;
 		this.petService = petService;
 	}
