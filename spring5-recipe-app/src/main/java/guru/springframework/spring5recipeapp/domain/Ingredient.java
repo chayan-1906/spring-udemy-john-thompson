@@ -1,17 +1,17 @@
 package guru.springframework.spring5recipeapp.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
+@Data
+@EqualsAndHashCode(exclude = {"recipe"})
 @Entity
 //@AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+//@Getter
+//@Setter
 public class Ingredient {
 
 	@Id
