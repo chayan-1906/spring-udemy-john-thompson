@@ -11,6 +11,9 @@ import java.util.Set;
 @Profile({"default", "map"})
 public class PetMapService extends AbstractMapService<Pet, Long> implements IPetService {
 
+	public PetMapService() {
+	}
+
 	/**
 	 * @return
 	 */
