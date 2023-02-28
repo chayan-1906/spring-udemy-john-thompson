@@ -19,7 +19,7 @@ import static org.mockito.Mockito.*;
 
 public class RecipeServiceImplTest {
 
-	RecipeServiceImpl recipeService;
+	IRecipeServiceImpl recipeService;
 
 	@Mock
 	IRecipeRepository recipeRepository;
@@ -34,7 +34,7 @@ public class RecipeServiceImplTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks ( this );
-		recipeService = new RecipeServiceImpl ( recipeRepository, recipeCommandToRecipe, recipeToRecipeCommand );
+		recipeService = new IRecipeServiceImpl ( recipeRepository, recipeCommandToRecipe, recipeToRecipeCommand );
 	}
 
 	@Test
@@ -54,9 +54,8 @@ public class RecipeServiceImplTest {
 
 	@Test
 	public void getRecipesTest() throws Exception {
-
 		Recipe recipe = new Recipe ( );
-		HashSet receipesData = new HashSet ( );
+		HashSet<Recipe> receipesData = new HashSet<> ( );
 		receipesData.add ( recipe );
 
 		when ( recipeService.getRecipes ( ) ).thenReturn ( receipesData );
@@ -66,5 +65,19 @@ public class RecipeServiceImplTest {
 		assertEquals ( recipes.size ( ), 1 );
 		verify ( recipeRepository, times ( 1 ) ).findAll ( );
 		verify ( recipeRepository, never ( ) ).findById ( anyLong ( ) );
+	}
+
+	@Test
+	public void testDeleteById() throws Exception {
+		/// given
+		Long idToDelete = 2L;
+
+		/// when
+		recipeService.deleteById ( idToDelete );
+
+		/// no 'when', since method has coid return type
+
+		/// then
+		verify ( recipeRepository, times ( 1 ) ).deleteById ( anyLong ( ) );
 	}
 }
