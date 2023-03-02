@@ -100,6 +100,7 @@ public class IngredientControllerTest {
 		IngredientCommand ingredientCommand = new IngredientCommand ( );
 
 		/// when
+		when ( ingredientService.findByRecipeIdAndIngredientId ( anyLong ( ), anyLong ( ) ) ).thenReturn ( ingredientCommand );
 		when ( unitOfMeasureService.listAllUoms ( ) ).thenReturn ( new HashSet<> ( ) );
 
 		/// then
