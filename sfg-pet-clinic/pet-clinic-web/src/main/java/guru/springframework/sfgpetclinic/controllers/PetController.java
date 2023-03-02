@@ -28,8 +28,7 @@ public class PetController {
 
 	private final IPetTypeService iPetTypeService;
 
-	public PetController(IPetService iPetService, IOwnerService iOwnerService,
-	                     IPetTypeService iPetTypeService) {
+	public PetController(IPetService iPetService, IOwnerService iOwnerService, IPetTypeService iPetTypeService) {
 		this.iPetService = iPetService;
 		this.iOwnerService = iOwnerService;
 		this.iPetTypeService = iPetTypeService;
@@ -52,6 +51,7 @@ public class PetController {
 
 	@GetMapping("/pets/new")
 	public String initCreationForm(Owner owner, Model model) {
+		System.out.println ( "initCreationForm" );
 		Pet pet = new Pet ( );
 		owner.getPets ( ).add ( pet );
 		pet.setOwner ( owner );
@@ -61,9 +61,11 @@ public class PetController {
 
 	@PostMapping("/pets/new")
 	public String processCreationForm(Owner owner, Pet pet, BindingResult bindingResult, ModelMap modelMap) {
+		System.out.println ( "processCreationForm" + "owner : " + owner.getId ( ) + " pet : " + pet.getName ( ) );
 		if (StringUtils.hasLength ( pet.getName ( ) ) && pet.isNew ( ) && owner.getPet ( pet.getName ( ), true ) != null) {
 			bindingResult.rejectValue ( "name", "duplicate", "already exists" );
 		}
+		pet.setOwner ( iOwnerService.findById ( owner.getId ( ) ) );
 		owner.getPets ( ).add ( pet );
 		if (bindingResult.hasErrors ( )) {
 			modelMap.put ( "pet", pet );
