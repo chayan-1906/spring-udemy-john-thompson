@@ -16,7 +16,8 @@ import java.util.Set;
 public class Pet extends BaseEntity {
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pet")
-	public Set<Visit> visits = new HashSet<> ( );
+	private Set<Visit> visits = new HashSet<> ( );
+
 	@Column(name = "name")
 	private String name;
 
@@ -24,9 +25,11 @@ public class Pet extends BaseEntity {
 	@JoinColumn(name = "type_id")
 
 	private PetType petType;
+
 	@ManyToOne
 	@JoinColumn(name = "owner_id")
 	private Owner owner;
+
 	@Column(name = "birth_date")
 	private LocalDate birthDate;
 
