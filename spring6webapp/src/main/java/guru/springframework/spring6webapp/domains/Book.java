@@ -29,7 +29,11 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "author_id"))
     private Set<Author> authors = new HashSet<>();
 
-    @Override
+    // Many Books -> One Publisher
+    @ManyToOne
+    private Publisher publisher;
+
+    /*@Override
     public String toString() {
         return "Book{" +
                 "id=" + id +
@@ -37,7 +41,7 @@ public class Book {
                 ", isbn='" + isbn + '\'' +
                 ", authors=" + authors +
                 '}';
-    }
+    }*/
 
     @Override
     public boolean equals(Object o) {
