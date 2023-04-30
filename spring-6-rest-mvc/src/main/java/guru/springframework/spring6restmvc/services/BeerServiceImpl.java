@@ -13,10 +13,10 @@ import java.util.*;
 @Service
 public class BeerServiceImpl implements IBeerService {
 
-    private Map<UUID, Beer> beerMap;
+    private final Map<UUID, Beer> beerMap;
 
     public BeerServiceImpl() {
-        this.beerMap = new HashMap<>();
+        beerMap = new HashMap<>();
 
         Beer beer1 = Beer.builder()
                 .id(UUID.randomUUID())
@@ -74,5 +74,45 @@ public class BeerServiceImpl implements IBeerService {
         System.out.println("Get Beer by Id - in service Id: " + id);
 
         return beerMap.get(id);
+    }
+
+    /**
+     * @param beer
+     * @return
+     */
+    @Override
+    public Beer saveBeer(Beer beer) {
+        Beer savedBeer = Beer.builder()
+                .id(UUID.randomUUID())
+                .beerName(beer.getBeerName())
+                .version(beer.getVersion())
+                .beerStyle(beer.getBeerStyle())
+                .quantityOnHand(beer.getQuantityOnHand())
+                .price(beer.getPrice())
+                .upc(beer.getUpc())
+                .createdDate(LocalDateTime.now())
+                .updatedDate(LocalDateTime.now())
+                .build();
+        beerMap.put(savedBeer.getId(), savedBeer);
+        return savedBeer;
+    }
+
+    /**
+     * @param id
+     * @param beer
+     * @return
+     */
+    @Override
+    public Beer updateBeer(UUID id, Beer beer) {
+        Beer existingBeer = beerMap.get(id);
+        existingBeer.setBeerName(beer.getBeerName());
+        existingBeer.setVersion(beer.getVersion());
+        existingBeer.setBeerStyle(beer.getBeerStyle());
+        existingBeer.setUpc(beer.getUpc());
+        existingBeer.setQuantityOnHand(beer.getQuantityOnHand());
+        existingBeer.setPrice(beer.getPrice());
+        existingBeer.setUpdatedDate(LocalDateTime.now());
+        beerMap.put(existingBeer.getId(), existingBeer);
+        return existingBeer;
     }
 }
