@@ -1,7 +1,9 @@
 package guru.springframework.spring6restmvc.services;
 
+import guru.springframework.spring6restmvc.models.Beer;
 import guru.springframework.spring6restmvc.models.Customer;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -90,5 +92,27 @@ public class CustomerServiceImpl implements ICustomerService {
         existingCustomer.setLastModifiedDate(LocalDateTime.now());
         customerMap.put(existingCustomer.getId(), existingCustomer);
         return existingCustomer;
+    }
+
+    /**
+     * @param id
+     */
+    @Override
+    public void deleteCustomer(UUID id) {
+        customerMap.remove(id);
+    }
+
+    /**
+     * @param id
+     * @param customer
+     * @return
+     */
+    @Override
+    public Customer patchCustomer(UUID id, Customer customer) {
+        Customer existing = customerMap.get(id);
+        if (StringUtils.hasText(customer.getCustomerName())) {
+            existing.setCustomerName(customer.getCustomerName());
+        }
+        return existing;
     }
 }

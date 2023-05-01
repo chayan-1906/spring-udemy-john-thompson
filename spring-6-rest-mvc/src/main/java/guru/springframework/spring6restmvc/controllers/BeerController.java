@@ -3,6 +3,7 @@ package guru.springframework.spring6restmvc.controllers;
 import guru.springframework.spring6restmvc.models.Beer;
 import guru.springframework.spring6restmvc.services.IBeerService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,8 +14,8 @@ import java.util.UUID;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/")
-@AllArgsConstructor
 public class BeerController {
 
     private final IBeerService beerService;
@@ -42,5 +43,17 @@ public class BeerController {
     public ResponseEntity<?> updateBeer(@RequestBody Beer beer, @RequestParam UUID id) {
         Beer updatedBeer = beerService.updateBeer(id, beer);
         return new ResponseEntity<>(updatedBeer, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deleteBeer")
+    public ResponseEntity<?> deleteBeer(@RequestParam UUID id) {
+        beerService.deleteBeer(id);
+        return new ResponseEntity<>("Beer with " + id + " deleted successfully", HttpStatus.OK);
+    }
+
+    @PatchMapping("/patchBeer")
+    public ResponseEntity<?> updateBeerPatchById(@RequestBody Beer beer, @RequestParam UUID id) {
+        Beer patchedBeer = beerService.patchBeer(id, beer);
+        return new ResponseEntity<>(patchedBeer, HttpStatus.OK);
     }
 }

@@ -14,4 +14,8 @@ public interface ICustomerService {
     Customer saveCustomer(Customer customer);
 
     Customer updateCustomer(UUID id, Customer customer);
+
+    void deleteCustomer(UUID id);
+
+    Customer patchCustomer(UUID id, Customer customer);
 }

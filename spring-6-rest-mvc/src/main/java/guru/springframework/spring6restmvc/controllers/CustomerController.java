@@ -40,4 +40,16 @@ public class CustomerController {
         Customer updatedCustomer = customerService.updateCustomer(id, customer);
         return new ResponseEntity<>(updatedCustomer, HttpStatus.OK);
     }
+
+    @DeleteMapping("/deleteCustomer")
+    public ResponseEntity<?> deleteCustomer(@RequestParam UUID id) {
+        customerService.deleteCustomer(id);
+        return new ResponseEntity<>("Customer with " + id + " deleted successfully", HttpStatus.OK);
+    }
+
+    @PatchMapping("/patchCustomer")
+    public ResponseEntity<?> updateCustomerPatchById(@RequestBody Customer customer, @RequestParam UUID id) {
+        Customer patchedCustomer = customerService.patchCustomer(id, customer);
+        return new ResponseEntity<>(patchedCustomer, HttpStatus.OK);
+    }
 }
