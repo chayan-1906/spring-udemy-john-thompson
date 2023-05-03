@@ -46,20 +46,20 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     /**
-     * @param id
-     * @return
-     */
-    @Override
-    public Customer getCustomerById(UUID id) {
-        return customerMap.get(id);
-    }
-
-    /**
      * @return
      */
     @Override
     public List<Customer> getAllCustomers() {
         return new ArrayList<>(customerMap.values());
+    }
+
+    /**
+     * @param id
+     * @return
+     */
+    @Override
+    public Optional<Customer> getCustomerById(UUID id) {
+        return Optional.of(customerMap.get(id));
     }
 
     /**

@@ -24,7 +24,7 @@ public class CustomerController {
 
     @GetMapping("/customer")
     public ResponseEntity<?> getCustomerById(@RequestParam UUID id) {
-        return new ResponseEntity<>(customerService.getCustomerById(id), HttpStatus.OK);
+        return new ResponseEntity<>(customerService.getCustomerById(id).orElseThrow(NotFoundException::new), HttpStatus.OK);
     }
 
     @PostMapping("/addCustomer")

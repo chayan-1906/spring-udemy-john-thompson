@@ -2,7 +2,6 @@ package guru.springframework.spring6restmvc.controllers;
 
 import guru.springframework.spring6restmvc.models.Beer;
 import guru.springframework.spring6restmvc.services.IBeerService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -28,7 +27,7 @@ public class BeerController {
     @GetMapping("/beer")
     public ResponseEntity<?> getBeerById(@RequestParam UUID id) {
         log.debug("Get Beer by Id - in controller");
-        return new ResponseEntity<>(beerService.getBeerById(id), HttpStatus.OK);
+        return new ResponseEntity<>(beerService.getBeerById(id).orElseThrow(NotFoundException::new), HttpStatus.OK);
     }
 
     @PostMapping("/addBeer")

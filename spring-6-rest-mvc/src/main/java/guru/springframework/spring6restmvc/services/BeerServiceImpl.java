@@ -70,11 +70,11 @@ public class BeerServiceImpl implements IBeerService {
      * @return
      */
     @Override
-    public Beer getBeerById(UUID id) {
+    public Optional<Beer> getBeerById(UUID id) {
         log.debug("Get Beer by Id - in service Id: " + id.toString());
         System.out.println("Get Beer by Id - in service Id: " + id);
 
-        return beerMap.get(id);
+        return Optional.of(beerMap.get(id));
     }
 
     /**
