@@ -1,7 +1,7 @@
 package guru.springframework.spring6restmvc.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import guru.springframework.spring6restmvc.models.Customer;
+import guru.springframework.spring6restmvc.models.CustomerDTO;
 import guru.springframework.spring6restmvc.services.CustomerServiceImpl;
 import guru.springframework.spring6restmvc.services.ICustomerService;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,7 +60,7 @@ class CustomerControllerTest {
 
     @Test
     void getCustomerById() throws Exception {
-        Customer customer = customerServiceImpl.getAllCustomers().get(0);
+        CustomerDTO customer = customerServiceImpl.getAllCustomers().get(0);
         given(customerService.getCustomerById(customer.getId())).willReturn(Optional.of(customer));
 
         mockMvc.perform(get("/api/v1/customer?id=" + customer.getId())
@@ -72,10 +72,10 @@ class CustomerControllerTest {
 
     @Test
     void testCreateNewBeer() throws Exception {
-        Customer customer = customerServiceImpl.getAllCustomers().get(0);
+        CustomerDTO customer = customerServiceImpl.getAllCustomers().get(0);
         customer.setVersion(null);
         customer.setId(null);
-        given(customerService.saveCustomer(any(Customer.class)))
+        given(customerService.saveCustomer(any(CustomerDTO.class)))
                 .willReturn(customerServiceImpl.getAllCustomers().get(1));
         mockMvc.perform(post("/api/v1/addCustomer")
                         .accept(MediaType.APPLICATION_JSON)

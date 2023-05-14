@@ -1,7 +1,6 @@
 package guru.springframework.spring6restmvc.services;
 
-import guru.springframework.spring6restmvc.models.Beer;
-import guru.springframework.spring6restmvc.models.Customer;
+import guru.springframework.spring6restmvc.models.CustomerDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -11,12 +10,12 @@ import java.util.*;
 @Service
 public class CustomerServiceImpl implements ICustomerService {
 
-    private final Map<UUID, Customer> customerMap;
+    private final Map<UUID, CustomerDTO> customerMap;
 
     public CustomerServiceImpl() {
         customerMap = new HashMap<>();
 
-        Customer customer1 = Customer.builder()
+        CustomerDTO customer1 = CustomerDTO.builder()
                 .id(UUID.randomUUID())
                 .customerName("Customer 1")
                 .version(1)
@@ -24,7 +23,7 @@ public class CustomerServiceImpl implements ICustomerService {
                 .lastModifiedDate(LocalDateTime.now())
                 .build();
 
-        Customer customer2 = Customer.builder()
+        CustomerDTO customer2 = CustomerDTO.builder()
                 .id(UUID.randomUUID())
                 .customerName("Customer 2")
                 .version(1)
@@ -32,7 +31,7 @@ public class CustomerServiceImpl implements ICustomerService {
                 .lastModifiedDate(LocalDateTime.now())
                 .build();
 
-        Customer customer3 = Customer.builder()
+        CustomerDTO customer3 = CustomerDTO.builder()
                 .id(UUID.randomUUID())
                 .customerName("Customer 3")
                 .version(1)
@@ -49,7 +48,7 @@ public class CustomerServiceImpl implements ICustomerService {
      * @return
      */
     @Override
-    public List<Customer> getAllCustomers() {
+    public List<CustomerDTO> getAllCustomers() {
         return new ArrayList<>(customerMap.values());
     }
 
@@ -58,7 +57,7 @@ public class CustomerServiceImpl implements ICustomerService {
      * @return
      */
     @Override
-    public Optional<Customer> getCustomerById(UUID id) {
+    public Optional<CustomerDTO> getCustomerById(UUID id) {
         return Optional.of(customerMap.get(id));
     }
 
@@ -67,8 +66,8 @@ public class CustomerServiceImpl implements ICustomerService {
      * @return
      */
     @Override
-    public Customer saveCustomer(Customer customer) {
-        Customer savedCustomer = Customer.builder()
+    public CustomerDTO saveCustomer(CustomerDTO customer) {
+        CustomerDTO savedCustomer = CustomerDTO.builder()
                 .id(UUID.randomUUID())
                 .customerName(customer.getCustomerName())
                 .version(customer.getVersion())
@@ -85,21 +84,22 @@ public class CustomerServiceImpl implements ICustomerService {
      * @return
      */
     @Override
-    public Customer updateCustomer(UUID id, Customer customer) {
-        Customer existingCustomer = customerMap.get(id);
+    public Optional<CustomerDTO> updateCustomer(UUID id, CustomerDTO customer) {
+        CustomerDTO existingCustomer = customerMap.get(id);
         existingCustomer.setCustomerName(customer.getCustomerName());
         existingCustomer.setVersion(customer.getVersion());
         existingCustomer.setLastModifiedDate(LocalDateTime.now());
         customerMap.put(existingCustomer.getId(), existingCustomer);
-        return existingCustomer;
+        return Optional.of(existingCustomer);
     }
 
     /**
      * @param id
      */
     @Override
-    public void deleteCustomer(UUID id) {
+    public Boolean deleteCustomer(UUID id) {
         customerMap.remove(id);
+        return true;
     }
 
     /**
@@ -108,11 +108,11 @@ public class CustomerServiceImpl implements ICustomerService {
      * @return
      */
     @Override
-    public Customer patchCustomer(UUID id, Customer customer) {
-        Customer existing = customerMap.get(id);
+    public Optional<CustomerDTO> patchCustomer(UUID id, CustomerDTO customer) {
+        CustomerDTO existing = customerMap.get(id);
         if (StringUtils.hasText(customer.getCustomerName())) {
             existing.setCustomerName(customer.getCustomerName());
         }
-        return existing;
+        return Optional.of(existing);
     }
 }

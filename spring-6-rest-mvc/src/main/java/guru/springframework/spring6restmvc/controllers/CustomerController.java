@@ -1,6 +1,6 @@
 package guru.springframework.spring6restmvc.controllers;
 
-import guru.springframework.spring6restmvc.models.Customer;
+import guru.springframework.spring6restmvc.models.CustomerDTO;
 import guru.springframework.spring6restmvc.services.ICustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -28,28 +29,30 @@ public class CustomerController {
     }
 
     @PostMapping("/addCustomer")
-    public ResponseEntity<?> addCustomer(@RequestBody Customer customer) {
-        Customer savedCustomer = customerService.saveCustomer(customer);
+    public ResponseEntity<?> addCustomer(@RequestBody CustomerDTO customer) {
+        CustomerDTO savedCustomer = customerService.saveCustomer(customer);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/api/v1/customer?id=" + savedCustomer.getId().toString());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
     @PutMapping("/updateCustomer")
-    public ResponseEntity<?> updateCustomer(@RequestBody Customer customer, @RequestParam UUID id) {
-        Customer updatedCustomer = customerService.updateCustomer(id, customer);
+    public ResponseEntity<?> updateCustomer(@RequestBody CustomerDTO customer, @RequestParam UUID id) {
+        Optional<CustomerDTO> updatedCustomer = customerService.updateCustomer(id, customer);
         return new ResponseEntity<>(updatedCustomer, HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteCustomer")
     public ResponseEntity<?> deleteCustomer(@RequestParam UUID id) {
-        customerService.deleteCustomer(id);
-        return new ResponseEntity<>("Customer with " + id + " deleted successfully", HttpStatus.OK);
+        if (!customerService.deleteCustomer(id)) {
+            throw new NotFoundException();
+        }
+        return new ResponseEntity<>("Beer with " + id + " deleted successfully", HttpStatus.OK);
     }
 
     @PatchMapping("/patchCustomer")
-    public ResponseEntity<?> updateCustomerPatchById(@RequestBody Customer customer, @RequestParam UUID id) {
-        Customer patchedCustomer = customerService.patchCustomer(id, customer);
+    public ResponseEntity<?> updateCustomerPatchById(@RequestBody CustomerDTO customer, @RequestParam UUID id) {
+        Optional<CustomerDTO> patchedCustomer = customerService.patchCustomer(id, customer);
         return new ResponseEntity<>(patchedCustomer, HttpStatus.OK);
     }
 }

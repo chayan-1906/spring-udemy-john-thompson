@@ -1,13 +1,15 @@
 package guru.springframework.spring6restmvc.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import guru.springframework.spring6restmvc.models.Beer;
+import guru.springframework.spring6restmvc.models.BeerDTO;
 import guru.springframework.spring6restmvc.services.BeerServiceImpl;
 import guru.springframework.spring6restmvc.services.IBeerService;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -19,10 +21,11 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -38,6 +41,12 @@ class BeerControllerTest {
 
     @MockBean
     IBeerService beerService;
+
+    @Captor
+    ArgumentCaptor<UUID> uuidArgumentCaptor;
+
+    @Captor
+    ArgumentCaptor<BeerDTO> beerDTOArgumentCaptor;
 
     BeerServiceImpl beerServiceImpl = new BeerServiceImpl();
 
@@ -65,7 +74,7 @@ class BeerControllerTest {
 
     @Test
     void getBeerById() throws Exception {
-        Beer testBeer = beerServiceImpl.getAllBeers().get(0);
+        BeerDTO testBeer = beerServiceImpl.getAllBeers().get(0);
         given(beerService.getBeerById(testBeer.getId())).willReturn(Optional.of(testBeer));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/beer?id=" + testBeer.getId())
@@ -78,10 +87,10 @@ class BeerControllerTest {
 
     @Test
     void testCreateNewBeer() throws Exception {
-        Beer beer = beerServiceImpl.getAllBeers().get(0);
+        BeerDTO beer = beerServiceImpl.getAllBeers().get(0);
         beer.setVersion(null);
         beer.setId(null);
-        given(beerService.saveBeer(any(Beer.class)))
+        given(beerService.saveBeer(any(BeerDTO.class)))
                 .willReturn(beerServiceImpl.getAllBeers().get(1));
         mockMvc.perform(post("/api/v1/addBeer")
                         .accept(MediaType.APPLICATION_JSON)
@@ -89,5 +98,33 @@ class BeerControllerTest {
                         .content(objectMapper.writeValueAsString(beer)))
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"));
+    }
+
+    @Test
+    void testUpdateBeer() throws Exception {
+        BeerDTO beerDTO = beerServiceImpl.getAllBeers().get(0);
+
+        given(beerService.updateBeer(any(), any())).willReturn(Optional.of(beerDTO));
+
+        mockMvc.perform(put("/api/v1/updateBeer?id=" + beerDTO.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(beerDTO)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void testDeleteBeer() throws Exception {
+        BeerDTO beerDTO = beerServiceImpl.getAllBeers().get(0);
+
+        given(beerService.deleteBeer(any())).willReturn(true);
+
+        mockMvc.perform(delete("/api/v1/deleteBeer?id=" + beerDTO.getId())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(beerService).deleteBeer(uuidArgumentCaptor.capture());
+
+        assertThat(beerDTO.getId()).isEqualTo(uuidArgumentCaptor.getValue());
     }
 }
