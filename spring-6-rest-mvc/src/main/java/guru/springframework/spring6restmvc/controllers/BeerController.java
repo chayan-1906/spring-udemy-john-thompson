@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -32,7 +33,7 @@ public class BeerController {
     }
 
     @PostMapping("/addBeer")
-    public ResponseEntity<?> addBeer(@RequestBody BeerDTO beer) {
+    public ResponseEntity<?> addBeer(@Validated @RequestBody BeerDTO beer) {
         BeerDTO savedBeer = beerService.saveBeer(beer);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/api/v1/beer?id=" + savedBeer.getId().toString());
@@ -40,7 +41,7 @@ public class BeerController {
     }
 
     @PutMapping("/updateBeer")
-    public ResponseEntity<?> updateBeer(@RequestBody BeerDTO beer, @RequestParam UUID id) {
+    public ResponseEntity<?> updateBeer(@Validated @RequestBody BeerDTO beer, @RequestParam UUID id) {
         Optional<BeerDTO> updatedBeer = beerService.updateBeer(id, beer);
         if (updatedBeer.isEmpty()) throw new NotFoundException();
         return new ResponseEntity<>(updatedBeer, HttpStatus.OK);
@@ -55,7 +56,7 @@ public class BeerController {
     }
 
     @PatchMapping("/patchBeer")
-    public ResponseEntity<?> updateBeerPatchById(@RequestBody BeerDTO beer, @RequestParam UUID id) {
+    public ResponseEntity<?> updateBeerPatchById(/*@Validated */@RequestBody BeerDTO beer, @RequestParam UUID id) {
         Optional<BeerDTO> patchedBeer = beerService.patchBeer(id, beer);
         return new ResponseEntity<>(patchedBeer, HttpStatus.OK);
     }
