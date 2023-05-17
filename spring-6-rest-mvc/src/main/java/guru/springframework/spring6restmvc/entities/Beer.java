@@ -10,6 +10,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+import org.springframework.data.annotation.Version;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -17,8 +20,8 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@Entity
 @Builder
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 public class Beer {
@@ -26,31 +29,30 @@ public class Beer {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(length = 36, columnDefinition = "varchar", updatable = false, nullable = false)
+    @JdbcTypeCode(SqlTypes.CHAR)
+    @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID id;
 
-    @NotBlank
+    @Version
+    private Integer version;
+
     @NotNull
+    @NotBlank
     @Size(max = 50)
     @Column(length = 50)
     private String beerName;
 
-    private Integer version;
-
     @NotNull
     private BeerStyle beerStyle;
 
-    @NotBlank
     @NotNull
+    @NotBlank
     @Size(max = 255)
     private String upc;
-
     private Integer quantityOnHand;
 
     @NotNull
     private BigDecimal price;
-
     private LocalDateTime createdDate;
-
     private LocalDateTime updatedDate;
 }
