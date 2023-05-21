@@ -35,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * @author padmanabhadas
  */
+
 @SpringBootTest
 class BeerControllerIntegrationTest {
 
@@ -66,7 +67,7 @@ class BeerControllerIntegrationTest {
     @Test
     void testListBeers() {
         List<BeerDTO> beerDTOs = beerService.getAllBeers();
-        assertThat(beerDTOs.size()).isEqualTo(3);
+        assertThat(beerDTOs.size()).isEqualTo(2413);
     }
 
     @Rollback
