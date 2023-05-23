@@ -1,7 +1,9 @@
 package guru.springframework.spring6restmvc.services;
 
+import guru.springframework.spring6restmvc.entities.Beer;
 import guru.springframework.spring6restmvc.mappers.BeerMapper;
 import guru.springframework.spring6restmvc.models.BeerDTO;
+import guru.springframework.spring6restmvc.models.BeerStyle;
 import guru.springframework.spring6restmvc.repositories.IBeerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
@@ -27,11 +29,39 @@ public class BeerServiceJPA implements IBeerService {
      * @return
      */
     @Override
-    public List<BeerDTO> getAllBeers() {
-        return beerRepository.findAll()
+    public List<BeerDTO> getAllBeers(String beerName, BeerStyle beerStyle, Boolean showInventory) {
+        List<Beer> beers;
+        if (StringUtils.hasText(beerName) && beerStyle == null) {
+            beers = getAllBeersByName(beerName);
+        } else if (!StringUtils.hasText(beerName) && beerStyle != null) {
+            beers = getAllBeersByStyle(beerStyle);
+        } else if (StringUtils.hasText(beerName) && beerStyle != null) {
+            beers = getAllBeersByNameAndStyle(beerName, beerStyle);
+        } else {
+            beers = beerRepository.findAll();
+        }
+
+        if (showInventory != null && !showInventory) {
+            beers.forEach(beer -> beer.setQuantityOnHand(null));
+        }
+
+        return beers
                 .stream()
                 .map(beerMapper::beerToBeerDTO)
                 .collect(Collectors.toList());
+    }
+
+    public List<Beer> getAllBeersByName(String beerName) {
+        return beerRepository.findAllByBeerNameIsLikeIgnoreCase("%" + beerName + "%");
+    }
+
+    public List<Beer> getAllBeersByStyle(BeerStyle beerStyle) {
+        return beerRepository.findAllByBeerStyle(beerStyle);
+    }
+
+    public List<Beer> getAllBeersByNameAndStyle(String beerName, BeerStyle beerStyle) {
+//        return beerRepository.findAllByBeerNameIsLikeIgnoreCaseAndBeerStyle("%" + beerName + "%", beerStyle);
+        return beerRepository.findAllByBeerNameIsLikeIgnoreCaseAndBeerStyle("%" + beerName + "%", beerStyle);
     }
 
     /**
