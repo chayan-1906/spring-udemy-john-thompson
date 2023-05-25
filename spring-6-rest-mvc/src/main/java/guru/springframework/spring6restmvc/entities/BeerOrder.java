@@ -2,13 +2,19 @@ package guru.springframework.spring6restmvc.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 import java.util.Set;
 import java.util.UUID;
+
+/**
+ * @author padmanabhadas
+ */
 
 @Getter
 @Setter
@@ -16,7 +22,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Customer {
+public class BeerOrder {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -25,18 +31,25 @@ public class Customer {
     @Column(length = 36, /*columnDefinition = "varchar(36)",*/ updatable = false, nullable = false)
     private UUID id;
 
-    private String customerName;
-
-    @Column(length = 255)
-    private String email;
-
     @Version
-    private Integer version;
+    private Long version;
 
-    private LocalDateTime createdDate;
+    @CreationTimestamp
+    @Column(updatable = false)
+    private Timestamp createdDate;
 
-    private LocalDateTime lastModifiedDate;
+    @UpdateTimestamp
+    private Timestamp lastModifiedDate;
 
-    @OneToMany(mappedBy = "customer")   // one customer can order many beers
-    private Set<BeerOrder> beerOrders;
+    private String customerRef;
+
+    @ManyToOne  // many beer orders for one customer
+    private Customer customer;
+
+    @OneToMany(mappedBy = "beerOrder")
+    private Set<BeerOrderLine> beerOrderLines;
+
+    public Boolean isNew() {
+        return this.id == null;
+    }
 }

@@ -1,10 +1,7 @@
 package guru.springframework.spring6restmvc.entities;
 
 import guru.springframework.spring6restmvc.models.BeerStyle;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -18,6 +15,7 @@ import org.springframework.data.annotation.Version;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -61,4 +59,7 @@ public class Beer {
 
     @UpdateTimestamp
     private LocalDateTime updatedDate;
+
+    @OneToMany(mappedBy = "beer")
+    private Set<BeerOrderLine> beerOrderLines;
 }
