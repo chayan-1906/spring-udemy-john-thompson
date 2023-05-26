@@ -7,6 +7,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -37,6 +38,7 @@ public class Customer {
 
     private LocalDateTime lastModifiedDate;
 
+    @Builder.Default
     @OneToMany(mappedBy = "customer")   // one customer can order many beers
-    private Set<BeerOrder> beerOrders;
+    private Set<BeerOrder> beerOrders = new HashSet<>();
 }
