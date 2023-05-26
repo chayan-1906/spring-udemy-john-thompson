@@ -68,7 +68,7 @@ class BeerControllerTest {
     @Test
     void testCreateBeerNullBeerName() throws Exception {
         BeerDTO beerDTO = BeerDTO.builder().build();
-        given(beerService.saveBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.getAllBeers(null, null, false).get(1));
+        given(beerService.saveBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.getAllBeers(null, null, false, 1, 25).getContent().get(1));
         MvcResult mvcResult = mockMvc.perform(post("/api/v1/addBeer")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -83,18 +83,18 @@ class BeerControllerTest {
 
     @Test
     void testListBeers() throws Exception {
-        given(beerService.getAllBeers(any(), any(), any()))
-                .willReturn(beerServiceImpl.getAllBeers(null, null, false));
+        given(beerService.getAllBeers(any(), any(), any(), any(), any()))
+                .willReturn(beerServiceImpl.getAllBeers(null, null, false, 1, 25));
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/beers")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.length()", Matchers.is(3)));
+                .andExpect(jsonPath("$.content.length()", Matchers.is(3)));
     }
 
     @Test
     void getBeerById() throws Exception {
-        BeerDTO testBeer = beerServiceImpl.getAllBeers(null, null, false).get(0);
+        BeerDTO testBeer = beerServiceImpl.getAllBeers(null, null, false, 1, 25).getContent().get(0);
         given(beerService.getBeerById(testBeer.getId())).willReturn(Optional.of(testBeer));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/beer?id=" + testBeer.getId())
@@ -107,11 +107,11 @@ class BeerControllerTest {
 
     @Test
     void testCreateNewBeer() throws Exception {
-        BeerDTO beer = beerServiceImpl.getAllBeers(null, null, false).get(0);
+        BeerDTO beer = beerServiceImpl.getAllBeers(null, null, false, 1, 25).getContent().get(0);
         beer.setVersion(null);
         beer.setId(null);
         given(beerService.saveBeer(any(BeerDTO.class)))
-                .willReturn(beerServiceImpl.getAllBeers(null, null, false).get(1));
+                .willReturn(beerServiceImpl.getAllBeers(null, null, false, 1, 25).getContent().get(1));
         mockMvc.perform(post("/api/v1/addBeer")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -122,7 +122,7 @@ class BeerControllerTest {
 
     @Test
     void testUpdateBeer() throws Exception {
-        BeerDTO beerDTO = beerServiceImpl.getAllBeers(null, null, false).get(0);
+        BeerDTO beerDTO = beerServiceImpl.getAllBeers(null, null, false, 1, 25).getContent().get(0);
 
         given(beerService.updateBeer(any(), any())).willReturn(Optional.of(beerDTO));
 
@@ -135,7 +135,7 @@ class BeerControllerTest {
 
     @Test
     void testUpdateBeerBlankName() throws Exception {
-        BeerDTO beerDTO = beerServiceImpl.getAllBeers(null, null, false).get(0);
+        BeerDTO beerDTO = beerServiceImpl.getAllBeers(null, null, false, 1, 25).getContent().get(0);
         beerDTO.setBeerName("");
         given(beerService.updateBeer(any(), any())).willReturn(Optional.of(beerDTO));
 
@@ -149,7 +149,7 @@ class BeerControllerTest {
 
     @Test
     void testDeleteBeer() throws Exception {
-        BeerDTO beerDTO = beerServiceImpl.getAllBeers(null, null, false).get(0);
+        BeerDTO beerDTO = beerServiceImpl.getAllBeers(null, null, false, 1, 25).getContent().get(0);
 
         given(beerService.deleteBeer(any())).willReturn(true);
 
@@ -164,7 +164,7 @@ class BeerControllerTest {
 
     @Test
     void testPatchBeer() throws Exception {
-        BeerDTO beerDTO = beerServiceImpl.getAllBeers(null, null, false).get(0);
+        BeerDTO beerDTO = beerServiceImpl.getAllBeers(null, null, false, 1, 25).getContent().get(0);
 
         Map<String, Object> beerMap = new HashMap<>();
         beerMap.put("beerName", "New Name");

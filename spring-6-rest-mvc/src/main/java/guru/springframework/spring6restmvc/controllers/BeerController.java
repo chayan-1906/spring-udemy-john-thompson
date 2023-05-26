@@ -25,8 +25,10 @@ public class BeerController {
     @GetMapping("/beers")
     public ResponseEntity<?> getAllBeers(@RequestParam(required = false) String beerName,
                                          @RequestParam(required = false) BeerStyle beerStyle,
-                                         @RequestParam(required = false) Boolean showInventory) {
-        return new ResponseEntity<>(beerService.getAllBeers(beerName, beerStyle, showInventory), HttpStatus.OK);
+                                         @RequestParam(required = false) Boolean showInventory,
+                                         @RequestParam(required = false) Integer pageNumber,
+                                         @RequestParam(required = false) Integer pageSize) {
+        return new ResponseEntity<>(beerService.getAllBeers(beerName, beerStyle, showInventory, 1, 25), HttpStatus.OK);
     }
 
     /*@GetMapping("/beersByName")
