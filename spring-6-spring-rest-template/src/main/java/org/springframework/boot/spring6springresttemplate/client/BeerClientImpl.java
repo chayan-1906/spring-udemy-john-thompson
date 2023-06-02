@@ -24,9 +24,9 @@ public class BeerClientImpl implements IBeerClient {
 
     private static final String BASE_URL = "http://localhost:8090";
 
-    private static final String GET_BEER_PATH = "/api/v1/beer";
+    public static final String GET_BEER_PATH = "/api/v1/beer";
 
-    private static final String GET_BEER_BY_ID_PATH = "/api/v1/beer/{beerId}";
+    public static final String GET_BEER_BY_ID_PATH = "/api/v1/beer/{beerId}";
 
     private final RestTemplateBuilder restTemplateBuilder;
 
@@ -89,7 +89,6 @@ public class BeerClientImpl implements IBeerClient {
     public BeerDTO createBeer(BeerDTO beerDTO) {
         RestTemplate restTemplate = restTemplateBuilder.build();
         URI uri = restTemplate.postForLocation(GET_BEER_PATH, beerDTO);
-        System.out.println("createBeer: " + restTemplate.getForObject(uri.getPath(), BeerDTO.class));
         return restTemplate.getForObject(uri.getPath(), BeerDTO.class);
     }
 
