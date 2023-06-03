@@ -28,6 +28,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static guru.springframework.spring6restmvc.controllers.BeerController.BEER_PATH;
+import static guru.springframework.spring6restmvc.controllers.BeerController.BEER_PATH_BY_ID;
 import static guru.springframework.spring6restmvc.controllers.BeerControllerTest.PASSWORD;
 import static guru.springframework.spring6restmvc.controllers.BeerControllerTest.USERNAME;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -104,7 +106,7 @@ class BeerControllerIntegrationTest {
 
     @Test
     void testListBeerByName() throws Exception {
-        mockMvc.perform(get("/api/v1/beers")
+        mockMvc.perform(get(BEER_PATH)
                         .with(httpBasic(USERNAME, PASSWORD))
                         .queryParam("beerName", "IPA")
                         .queryParam("pageSize", "800"))
@@ -114,7 +116,7 @@ class BeerControllerIntegrationTest {
 
     @Test
     void testListBeerByStyle() throws Exception {
-        mockMvc.perform(get("/api/v1/beers")
+        mockMvc.perform(get(BEER_PATH)
                         .with(httpBasic(USERNAME, PASSWORD))
                         .queryParam("beerStyle", BeerStyle.IPA.name()))
                 .andExpect(status().isOk())
@@ -123,7 +125,7 @@ class BeerControllerIntegrationTest {
 
     @Test
     void testListBeerByStyleAndNameShowInventoryTrue() throws Exception {
-        mockMvc.perform(get("/api/v1/beers")
+        mockMvc.perform(get(BEER_PATH)
                         .with(httpBasic(USERNAME, PASSWORD))
                         .queryParam("beerName", "IPA")
                         .queryParam("beerStyle", BeerStyle.IPA.name())
@@ -135,7 +137,7 @@ class BeerControllerIntegrationTest {
 
     @Test
     void testListBeerByStyleAndNameShowInventoryTruePage2() throws Exception {
-        mockMvc.perform(get("/api/v1/beers")
+        mockMvc.perform(get(BEER_PATH)
                         .with(httpBasic(USERNAME, PASSWORD))
                         .queryParam("beerName", "IPA")
                         .queryParam("beerStyle", BeerStyle.IPA.name())
@@ -149,7 +151,7 @@ class BeerControllerIntegrationTest {
 
     @Test
     void testListBeerByStyleAndNameShowInventoryFalse() throws Exception {
-        mockMvc.perform(get("/api/v1/beers")
+        mockMvc.perform(get(BEER_PATH)
                         .with(httpBasic(USERNAME, PASSWORD))
                         .queryParam("beerName", "IPA")
                         .queryParam("beerStyle", BeerStyle.IPA.name())
@@ -161,7 +163,7 @@ class BeerControllerIntegrationTest {
 
     @Test
     void testListBeerByStyleAndName() throws Exception {
-        mockMvc.perform(get("/api/v1/beers")
+        mockMvc.perform(get(BEER_PATH)
                         .with(httpBasic(USERNAME, PASSWORD))
                         .queryParam("beerName", "IPA")
                         .queryParam("beerStyle", BeerStyle.IPA.name()))
@@ -219,7 +221,7 @@ class BeerControllerIntegrationTest {
         Beer beer = beerRepository.findAll().get(0);
         BeerDTO beerDTO = beerMapper.beerToBeerDTO(beer);
         beerDTO.setBeerName("Updated Name");
-        MvcResult result = mockMvc.perform(put("/api/v1/updateBeer?id=" + beer.getId())
+        MvcResult result = mockMvc.perform(put(BEER_PATH_BY_ID, beer.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beerDTO)))
@@ -229,7 +231,7 @@ class BeerControllerIntegrationTest {
 
         beerDTO.setBeerName("Updated Name 2");
 
-        MvcResult result2 = mockMvc.perform(put("/api/v1/updateBeer?id=" + beer.getId())
+        MvcResult result2 = mockMvc.perform(put(BEER_PATH_BY_ID, beer.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beerDTO)))
@@ -262,7 +264,7 @@ class BeerControllerIntegrationTest {
         Map<String, Object> beerMap = new HashMap<>();
         beerMap.put("beerName", "New Name 1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890");
 
-        MvcResult mvcResult = mockMvc.perform(patch("/api/v1/patchBeer?id=" + beer.getId())
+        MvcResult mvcResult = mockMvc.perform(patch(BEER_PATH_BY_ID, beer.getId())
                         .with(httpBasic(USERNAME, PASSWORD))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
@@ -276,7 +278,7 @@ class BeerControllerIntegrationTest {
 
     @Test
     void testNoAuth() throws Exception {
-        mockMvc.perform(get("/api/v1/beers")
+        mockMvc.perform(get(BEER_PATH)
 //                        .with(httpBasic(USERNAME, PASSWORD))
                         .queryParam("beerStyle", BeerStyle.IPA.name()))
                 .andExpect(status().isUnauthorized());
