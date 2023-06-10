@@ -22,7 +22,7 @@ import java.util.UUID;
 @Service
 public class BeerClientImpl implements IBeerClient {
 
-    private static final String BASE_URL = "http://localhost:8090";
+//    private static final String BASE_URL = "http://localhost:8090";
 
     public static final String GET_BEER_PATH = "/api/v1/beer";
 
